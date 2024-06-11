@@ -98,15 +98,13 @@
 // I/O signals core has. Range is from 1 to 32. If more than 32 I/O signals are
 // required, use several instances of GPIO IP core.
 //
-// Default is 16.
-//
-`define GPIO_IOS 31
+`define GPIO_IOS 24
 
 //depending on number of GPIO_IOS, define this...
 // for example: if there is 26 GPIO_IOS, define GPIO_LINES26
 //
 
-`define GPIO_LINES31
+`define GPIO_LINES24
 
 //
 // Undefine this one if you don't want to remove GPIO block from your design
@@ -141,15 +139,15 @@
 `define GPIO_REGISTERED_IO_OUTPUTS
 
 //
-// Implement aux feature. If this define is not defined also aux_i port and 
+// Implement aux feature. If this define is not defined also aux_i port and
 // RGPIO_AUX register will be removed
 //
 // Defined by default.
 //
-`define GPIO_AUX_IMPLEMENT
+//`define GPIO_AUX_IMPLEMENT
 
 //
-// If this is not defined clk_pad_i will be removed. Input lines will be lached on 
+// If this is not defined clk_pad_i will be removed. Input lines will be lached on
 // positive edge of system clock
 // if disabled defines GPIO_NO_NEGEDGE_FLOPS, GPIO_NO_CLKPAD_LOGIC will have no effect.
 //
@@ -165,7 +163,7 @@
 //
 // By default it is not defined.
 //
-//`define GPIO_NO_NEGEDGE_FLOPS
+`define GPIO_NO_NEGEDGE_FLOPS
 
 //
 // If GPIO_NO_NEGEDGE_FLOPS is defined, a mux needs to be placed on external clock
@@ -175,7 +173,7 @@
 //
 // By default it is not defined.
 //
-//`define GPIO_NO_CLKPAD_LOGIC
+`define GPIO_NO_CLKPAD_LOGIC
 
 
 //
@@ -187,8 +185,8 @@
 `define GPIO_SYNC_IN_WB
 
 //
-// Add synchronization flops to external clock input line. Gpio will have just one clock domain, 
-// everithing will be synchronized to wishbone clock. External clock muas be at least 2-3x slower 
+// Add synchronization flops to external clock input line. Gpio will have just one clock domain,
+// everithing will be synchronized to wishbone clock. External clock muas be at least 2-3x slower
 // as systam clock.
 //
 `define GPIO_SYNC_CLK_WB
@@ -207,7 +205,7 @@
 
 
 
-// 
+//
 // Undefine if you don't need to read GPIO registers except for RGPIO_IN register.
 // When it is undefined all reads of GPIO registers return RGPIO_IN register. This
 // is usually useful if you want really small area (for example when implemented in
@@ -226,7 +224,7 @@
 //
 // By default it is defined.
 //
-`define GPIO_FULL_DECODE
+//`define GPIO_FULL_DECODE
 
 //
 // Strict 32-bit WISHBONE access
@@ -237,7 +235,7 @@
 //
 // By default it is defined.
 //
-//`define GPIO_STRICT_32BIT_ACCESS
+`define GPIO_STRICT_32BIT_ACCESS
 //
 `ifdef GPIO_STRICT_32BIT_ACCESS
 `else
@@ -259,9 +257,9 @@
 //
 // WISHBONE address bits used for full decoding of GPIO registers.
 //
-`define GPIO_ADDRHH 7
-`define GPIO_ADDRHL 6
-`define GPIO_ADDRLH 1
+`define GPIO_ADDRHH 3
+`define GPIO_ADDRHL 4
+`define GPIO_ADDRLH -1
 `define GPIO_ADDRLL 0
 
 //
@@ -269,7 +267,7 @@
 //
 // Default 5:2.
 //
-`define GPIO_OFS_BITS	`GPIO_ADDRHL-1:`GPIO_ADDRLH+1
+`define GPIO_OFS_BITS  `GPIO_ADDRHL-1:`GPIO_ADDRLH+1
 
 //
 // Addresses of GPIO registers
@@ -282,18 +280,18 @@
 // and the register will not be implemented. Instead a fixed default value will
 // be used.
 //
-`define GPIO_RGPIO_IN		  4'h0	// Address 0x00
-`define GPIO_RGPIO_OUT		4'h1	// Address 0x04
-`define GPIO_RGPIO_OE		  4'h2	// Address 0x08
-`define GPIO_RGPIO_INTE		4'h3	// Address 0x0c
-`define GPIO_RGPIO_PTRIG	4'h4	// Address 0x10
+`define GPIO_RGPIO_IN      4'h0  // Address 0x00
+`define GPIO_RGPIO_OUT    4'h1  // Address 0x04
+`define GPIO_RGPIO_OE      4'h2  // Address 0x08
+`define GPIO_RGPIO_INTE    4'h3  // Address 0x0c
+`define GPIO_RGPIO_PTRIG  4'h4  // Address 0x10
 
 `ifdef GPIO_AUX_IMPLEMENT
-`define GPIO_RGPIO_AUX		4'h5	// Address 0x14
+`define GPIO_RGPIO_AUX    4'h5  // Address 0x14
 `endif // GPIO_AUX_IMPLEMENT
 
-`define GPIO_RGPIO_CTRL		4'h6	// Address 0x18
-`define GPIO_RGPIO_INTS		4'h7	// Address 0x1c
+`define GPIO_RGPIO_CTRL    4'h6  // Address 0x18
+`define GPIO_RGPIO_INTS    4'h7  // Address 0x1c
 
 `ifdef GPIO_CLKPAD
 `define GPIO_RGPIO_ECLK   4'h8  // Address 0x20
@@ -303,13 +301,13 @@
 //
 // Default values for unimplemented GPIO registers
 //
-`define GPIO_DEF_RGPIO_IN	`GPIO_IOS'h0
-`define GPIO_DEF_RGPIO_OUT	`GPIO_IOS'h0
-`define GPIO_DEF_RGPIO_OE	`GPIO_IOS'h0
-`define GPIO_DEF_RGPIO_INTE	`GPIO_IOS'h0
-`define GPIO_DEF_RGPIO_PTRIG	`GPIO_IOS'h0
-`define GPIO_DEF_RGPIO_AUX	`GPIO_IOS'h0
-`define GPIO_DEF_RGPIO_CTRL	`GPIO_IOS'h0
+`define GPIO_DEF_RGPIO_IN  `GPIO_IOS'h0
+`define GPIO_DEF_RGPIO_OUT  `GPIO_IOS'h0
+`define GPIO_DEF_RGPIO_OE  `GPIO_IOS'h0
+`define GPIO_DEF_RGPIO_INTE  `GPIO_IOS'h0
+`define GPIO_DEF_RGPIO_PTRIG  `GPIO_IOS'h0
+`define GPIO_DEF_RGPIO_AUX  `GPIO_IOS'h0
+`define GPIO_DEF_RGPIO_CTRL  `GPIO_IOS'h0
 `define GPIO_DEF_RGPIO_ECLK `GPIO_IOS'h0
 `define GPIO_DEF_RGPIO_NEC `GPIO_IOS'h0
 
@@ -320,7 +318,7 @@
 // To comply with the GPIO IP core specification document they must go from
 // bit 0 to bit 1 in the following order: INTE, INT
 //
-`define GPIO_RGPIO_CTRL_INTE		0
-`define GPIO_RGPIO_CTRL_INTS		1
+`define GPIO_RGPIO_CTRL_INTE    0
+`define GPIO_RGPIO_CTRL_INTS    1
 
 

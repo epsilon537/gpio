@@ -113,19 +113,19 @@
 `include "gpio_defines.v"
 
 module gpio_top(
-	// WISHBONE Interface
-	wb_clk_i, wb_rst_i, wb_cyc_i, wb_adr_i, wb_dat_i, wb_sel_i, wb_we_i, wb_stb_i,
-	wb_dat_o, wb_ack_o, wb_err_o, wb_inta_o,
+  // WISHBONE Interface
+  wb_clk_i, wb_rst_i, wb_cyc_i, wb_adr_i, wb_dat_i, wb_sel_i, wb_we_i, wb_stb_i,
+  wb_dat_o, wb_ack_o, wb_err_o, wb_inta_o,
 
 `ifdef GPIO_AUX_IMPLEMENT
-	// Auxiliary inputs interface
-	aux_i,
+  // Auxiliary inputs interface
+  aux_i,
 `endif //  GPIO_AUX_IMPLEMENT
 
-	// External GPIO Interface
-	ext_pad_i, ext_pad_o, ext_padoe_o
+  // External GPIO Interface
+  ext_pad_i, ext_pad_o, ext_padoe_o
 `ifdef GPIO_CLKPAD
-  , clk_pad_i 
+  , clk_pad_i
 `endif
 );
 
@@ -135,33 +135,33 @@ parameter gw = `GPIO_IOS;
 //
 // WISHBONE Interface
 //
-input             wb_clk_i;	// Clock
-input             wb_rst_i;	// Reset
-input             wb_cyc_i;	// cycle valid input
-input   [aw-1:0]	wb_adr_i;	// address bus inputs
-input   [dw-1:0]	wb_dat_i;	// input data bus
-input	  [3:0]     wb_sel_i;	// byte select inputs
-input             wb_we_i;	// indicates write transfer
-input             wb_stb_i;	// strobe input
-output  [dw-1:0]  wb_dat_o;	// output data bus
-output            wb_ack_o;	// normal termination
-output            wb_err_o;	// termination w/ error
-output            wb_inta_o;	// Interrupt request output
+input             wb_clk_i;  // Clock
+input             wb_rst_i;  // Reset
+input             wb_cyc_i;  // cycle valid input
+input   [aw-1:0]  wb_adr_i;  // address bus inputs
+input   [dw-1:0]  wb_dat_i;  // input data bus
+input    [3:0]     wb_sel_i;  // byte select inputs
+input             wb_we_i;  // indicates write transfer
+input             wb_stb_i;  // strobe input
+output  [dw-1:0]  wb_dat_o;  // output data bus
+output            wb_ack_o;  // normal termination
+output            wb_err_o;  // termination w/ error
+output            wb_inta_o;  // Interrupt request output
 
 `ifdef GPIO_AUX_IMPLEMENT
 // Auxiliary Inputs Interface
-input	  [gw-1:0]  aux_i;		// Auxiliary inputs
+input    [gw-1:0]  aux_i;    // Auxiliary inputs
 `endif // GPIO_AUX_IMPLEMENT
 
 //
 // External GPIO Interface
 //
-input   [gw-1:0]  ext_pad_i;	// GPIO Inputs
+input   [gw-1:0]  ext_pad_i;  // GPIO Inputs
 `ifdef GPIO_CLKPAD
-input             clk_pad_i;	// GPIO Eclk
+input             clk_pad_i;  // GPIO Eclk
 `endif //  GPIO_CLKPAD
-output  [gw-1:0]  ext_pad_o;	// GPIO Outputs
-output  [gw-1:0]  ext_padoe_o;	// GPIO output drivers enables
+output  [gw-1:0]  ext_pad_o;  // GPIO Outputs
+output  [gw-1:0]  ext_padoe_o;  // GPIO output drivers enables
 
 `ifdef GPIO_IMPLEMENTED
 
@@ -169,100 +169,100 @@ output  [gw-1:0]  ext_padoe_o;	// GPIO output drivers enables
 // GPIO Input Register (or no register)
 //
 `ifdef GPIO_RGPIO_IN
-reg	[gw-1:0]	rgpio_in;	// RGPIO_IN register
+reg  [gw-1:0]  rgpio_in;  // RGPIO_IN register
 `else
-wire	[gw-1:0]	rgpio_in;	// No register
+wire  [gw-1:0]  rgpio_in;  // No register
 `endif
 
 //
 // GPIO Output Register (or no register)
 //
 `ifdef GPIO_RGPIO_OUT
-reg	[gw-1:0]	rgpio_out;	// RGPIO_OUT register
+reg  [gw-1:0]  rgpio_out;  // RGPIO_OUT register
 `else
-wire	[gw-1:0]	rgpio_out;	// No register
+wire  [gw-1:0]  rgpio_out;  // No register
 `endif
 
 //
 // GPIO Output Driver Enable Register (or no register)
 //
 `ifdef GPIO_RGPIO_OE
-reg	[gw-1:0]	rgpio_oe;	// RGPIO_OE register
+reg  [gw-1:0]  rgpio_oe;  // RGPIO_OE register
 `else
-wire	[gw-1:0]	rgpio_oe;	// No register
+wire  [gw-1:0]  rgpio_oe;  // No register
 `endif
 
 //
 // GPIO Interrupt Enable Register (or no register)
 //
 `ifdef GPIO_RGPIO_INTE
-reg	[gw-1:0]	rgpio_inte;	// RGPIO_INTE register
+reg  [gw-1:0]  rgpio_inte;  // RGPIO_INTE register
 `else
-wire	[gw-1:0]	rgpio_inte;	// No register
+wire  [gw-1:0]  rgpio_inte;  // No register
 `endif
 
 //
 // GPIO Positive edge Triggered Register (or no register)
 //
 `ifdef GPIO_RGPIO_PTRIG
-reg	[gw-1:0]	rgpio_ptrig;	// RGPIO_PTRIG register
+reg  [gw-1:0]  rgpio_ptrig;  // RGPIO_PTRIG register
 `else
-wire	[gw-1:0]	rgpio_ptrig;	// No register
+wire  [gw-1:0]  rgpio_ptrig;  // No register
 `endif
 
 //
 // GPIO Auxiliary select Register (or no register)
 //
 `ifdef GPIO_RGPIO_AUX
-reg	[gw-1:0]	rgpio_aux;	// RGPIO_AUX register
+reg  [gw-1:0]  rgpio_aux;  // RGPIO_AUX register
 `else
-wire	[gw-1:0]	rgpio_aux;	// No register
+wire  [gw-1:0]  rgpio_aux;  // No register
 `endif
 
 //
 // GPIO Control Register (or no register)
 //
 `ifdef GPIO_RGPIO_CTRL
-reg	[1:0]		rgpio_ctrl;	// RGPIO_CTRL register
+reg  [1:0]    rgpio_ctrl;  // RGPIO_CTRL register
 `else
-wire	[1:0]		rgpio_ctrl;	// No register
+wire  [1:0]    rgpio_ctrl;  // No register
 `endif
 
 //
 // GPIO Interrupt Status Register (or no register)
 //
 `ifdef GPIO_RGPIO_INTS
-reg	[gw-1:0]	rgpio_ints;	// RGPIO_INTS register
+reg  [gw-1:0]  rgpio_ints;  // RGPIO_INTS register
 `else
-wire	[gw-1:0]	rgpio_ints;	// No register
+wire  [gw-1:0]  rgpio_ints;  // No register
 `endif
 
 //
 // GPIO Enable Clock  Register (or no register)
 //
 `ifdef GPIO_RGPIO_ECLK
-reg	[gw-1:0]	rgpio_eclk;	// RGPIO_ECLK register
+reg  [gw-1:0]  rgpio_eclk;  // RGPIO_ECLK register
 `else
-wire	[gw-1:0]	rgpio_eclk;	// No register
+wire  [gw-1:0]  rgpio_eclk;  // No register
 `endif
 
 //
 // GPIO Active Negative Edge  Register (or no register)
 //
 `ifdef GPIO_RGPIO_NEC
-reg	[gw-1:0]	rgpio_nec;	// RGPIO_NEC register
+reg  [gw-1:0]  rgpio_nec;  // RGPIO_NEC register
 `else
-wire	[gw-1:0]	rgpio_nec;	// No register
+wire  [gw-1:0]  rgpio_nec;  // No register
 `endif
 
 
 //
 // Synchronization flops for input signals
 //
-`ifdef GPIO_SYNC_IN_WB 
+`ifdef GPIO_SYNC_IN_WB
 reg  [gw-1:0]  sync      ,
                ext_pad_s ;
-`else 
+`else
 wire [gw-1:0]  ext_pad_s ;
 `endif
 
@@ -328,10 +328,10 @@ assign wb_ack = wb_cyc_i & wb_stb_i & !wb_err_o;
 //
 `ifdef GPIO_REGISTERED_WB_OUTPUTS
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		wb_ack_o <= #1 1'b0;
-	else
-		wb_ack_o <= #1 wb_ack & ~wb_ack_o & (!wb_err) ;
+  if (wb_rst_i)
+    wb_ack_o <= #1 1'b0;
+  else
+    wb_ack_o <= #1 wb_ack & ~wb_ack_o & (!wb_err) ;
 `else
 assign wb_ack_o = wb_ack;
 `endif
@@ -358,10 +358,10 @@ assign wb_err = 1'b0;
 //
 `ifdef GPIO_REGISTERED_WB_OUTPUTS
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		wb_err_o <= #1 1'b0;
-	else
-		wb_err_o <= #1 wb_err & ~wb_err_o;
+  if (wb_rst_i)
+    wb_err_o <= #1 1'b0;
+  else
+    wb_err_o <= #1 wb_err & ~wb_err_o;
 `else
 assign wb_err_o = wb_err;
 `endif
@@ -371,7 +371,7 @@ assign wb_err_o = wb_err;
 //
 `ifdef GPIO_FULL_DECODE
 assign full_decoding = (wb_adr_i[`GPIO_ADDRHH:`GPIO_ADDRHL] == {`GPIO_ADDRHH-`GPIO_ADDRHL+1{1'b0}}) &
-			(wb_adr_i[`GPIO_ADDRLH:`GPIO_ADDRLL] == {`GPIO_ADDRLH-`GPIO_ADDRLL+1{1'b0}});
+      (wb_adr_i[`GPIO_ADDRLH:`GPIO_ADDRLL] == {`GPIO_ADDRLH-`GPIO_ADDRLL+1{1'b0}});
 `else
 assign full_decoding = 1'b1;
 `endif
@@ -413,14 +413,14 @@ assign rgpio_nec_sel = wb_cyc_i & wb_stb_i & (wb_adr_i[`GPIO_OFS_BITS] == `GPIO_
 //
 `ifdef GPIO_RGPIO_CTRL
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		rgpio_ctrl <= #1 2'b0;
-	else if (rgpio_ctrl_sel && wb_we_i)
-		rgpio_ctrl <= #1 wb_dat_i[1:0];
-	else if (rgpio_ctrl[`GPIO_RGPIO_CTRL_INTE])
-		rgpio_ctrl[`GPIO_RGPIO_CTRL_INTS] <= #1 rgpio_ctrl[`GPIO_RGPIO_CTRL_INTS] | wb_inta_o;
+  if (wb_rst_i)
+    rgpio_ctrl <= #1 2'b0;
+  else if (rgpio_ctrl_sel && wb_we_i)
+    rgpio_ctrl <= #1 wb_dat_i[1:0];
+  else if (rgpio_ctrl[`GPIO_RGPIO_CTRL_INTE])
+    rgpio_ctrl[`GPIO_RGPIO_CTRL_INTS] <= #1 rgpio_ctrl[`GPIO_RGPIO_CTRL_INTS] | wb_inta_o;
 `else
-assign rgpio_ctrl = 2'h01;	// RGPIO_CTRL[EN] = 1
+assign rgpio_ctrl = 2'h01;  // RGPIO_CTRL[EN] = 1
 `endif
 
 //
@@ -428,12 +428,12 @@ assign rgpio_ctrl = 2'h01;	// RGPIO_CTRL[EN] = 1
 //
 `ifdef GPIO_RGPIO_OUT
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		rgpio_out <= #1 {gw{1'b0}};
-	else if (rgpio_out_sel && wb_we_i)
+  if (wb_rst_i)
+    rgpio_out <= #1 {gw{1'b0}};
+  else if (rgpio_out_sel && wb_we_i)
     begin
 `ifdef GPIO_STRICT_32BIT_ACCESS
-		rgpio_out <= #1 wb_dat_i[gw-1:0];
+    rgpio_out <= #1 wb_dat_i[gw-1:0];
 `endif
 
 `ifdef GPIO_WB_BYTES4
@@ -467,7 +467,7 @@ always @(posedge wb_clk_i or posedge wb_rst_i)
    end
 
 `else
-assign rgpio_out = `GPIO_DEF_RGPIO_OUT;	// RGPIO_OUT = 0x0
+assign rgpio_out = `GPIO_DEF_RGPIO_OUT;  // RGPIO_OUT = 0x0
 `endif
 
 //
@@ -475,12 +475,12 @@ assign rgpio_out = `GPIO_DEF_RGPIO_OUT;	// RGPIO_OUT = 0x0
 //
 `ifdef GPIO_RGPIO_OE
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		rgpio_oe <= #1 {gw{1'b0}};
-	else if (rgpio_oe_sel && wb_we_i)
+  if (wb_rst_i)
+    rgpio_oe <= #1 {gw{1'b0}};
+  else if (rgpio_oe_sel && wb_we_i)
   begin
 `ifdef GPIO_STRICT_32BIT_ACCESS
-		rgpio_oe <= #1 wb_dat_i[gw-1:0];
+    rgpio_oe <= #1 wb_dat_i[gw-1:0];
 `endif
 
 `ifdef GPIO_WB_BYTES4
@@ -514,7 +514,7 @@ always @(posedge wb_clk_i or posedge wb_rst_i)
    end
 
 `else
-assign rgpio_oe = `GPIO_DEF_RGPIO_OE;	// RGPIO_OE = 0x0
+assign rgpio_oe = `GPIO_DEF_RGPIO_OE;  // RGPIO_OE = 0x0
 `endif
 
 //
@@ -522,12 +522,12 @@ assign rgpio_oe = `GPIO_DEF_RGPIO_OE;	// RGPIO_OE = 0x0
 //
 `ifdef GPIO_RGPIO_INTE
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		rgpio_inte <= #1 {gw{1'b0}};
-	else if (rgpio_inte_sel && wb_we_i)
+  if (wb_rst_i)
+    rgpio_inte <= #1 {gw{1'b0}};
+  else if (rgpio_inte_sel && wb_we_i)
   begin
 `ifdef GPIO_STRICT_32BIT_ACCESS
-		rgpio_inte <= #1 wb_dat_i[gw-1:0];
+    rgpio_inte <= #1 wb_dat_i[gw-1:0];
 `endif
 
 `ifdef GPIO_WB_BYTES4
@@ -562,7 +562,7 @@ always @(posedge wb_clk_i or posedge wb_rst_i)
 
 
 `else
-assign rgpio_inte = `GPIO_DEF_RGPIO_INTE;	// RGPIO_INTE = 0x0
+assign rgpio_inte = `GPIO_DEF_RGPIO_INTE;  // RGPIO_INTE = 0x0
 `endif
 
 //
@@ -570,12 +570,12 @@ assign rgpio_inte = `GPIO_DEF_RGPIO_INTE;	// RGPIO_INTE = 0x0
 //
 `ifdef GPIO_RGPIO_PTRIG
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		rgpio_ptrig <= #1 {gw{1'b0}};
-	else if (rgpio_ptrig_sel && wb_we_i)
+  if (wb_rst_i)
+    rgpio_ptrig <= #1 {gw{1'b0}};
+  else if (rgpio_ptrig_sel && wb_we_i)
   begin
 `ifdef GPIO_STRICT_32BIT_ACCESS
-		rgpio_ptrig <= #1 wb_dat_i[gw-1:0];
+    rgpio_ptrig <= #1 wb_dat_i[gw-1:0];
 `endif
 
 `ifdef GPIO_WB_BYTES4
@@ -607,9 +607,9 @@ always @(posedge wb_clk_i or posedge wb_rst_i)
        rgpio_ptrig [gw-1:0] <= #1 wb_dat_i [gw-1:0] ;
 `endif
    end
-    
+
 `else
-assign rgpio_ptrig = `GPIO_DEF_RGPIO_PTRIG;	// RGPIO_PTRIG = 0x0
+assign rgpio_ptrig = `GPIO_DEF_RGPIO_PTRIG;  // RGPIO_PTRIG = 0x0
 `endif
 
 //
@@ -617,12 +617,12 @@ assign rgpio_ptrig = `GPIO_DEF_RGPIO_PTRIG;	// RGPIO_PTRIG = 0x0
 //
 `ifdef GPIO_RGPIO_AUX
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		rgpio_aux <= #1 {gw{1'b0}};
-	else if (rgpio_aux_sel && wb_we_i)
+  if (wb_rst_i)
+    rgpio_aux <= #1 {gw{1'b0}};
+  else if (rgpio_aux_sel && wb_we_i)
   begin
 `ifdef GPIO_STRICT_32BIT_ACCESS
-		rgpio_aux <= #1 wb_dat_i[gw-1:0];
+    rgpio_aux <= #1 wb_dat_i[gw-1:0];
 `endif
 
 `ifdef GPIO_WB_BYTES4
@@ -656,7 +656,7 @@ always @(posedge wb_clk_i or posedge wb_rst_i)
    end
 
 `else
-assign rgpio_aux = `GPIO_DEF_RGPIO_AUX;	// RGPIO_AUX = 0x0
+assign rgpio_aux = `GPIO_DEF_RGPIO_AUX;  // RGPIO_AUX = 0x0
 `endif
 
 
@@ -665,12 +665,12 @@ assign rgpio_aux = `GPIO_DEF_RGPIO_AUX;	// RGPIO_AUX = 0x0
 //
 `ifdef GPIO_RGPIO_ECLK
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		rgpio_eclk <= #1 {gw{1'b0}};
-	else if (rgpio_eclk_sel && wb_we_i)
+  if (wb_rst_i)
+    rgpio_eclk <= #1 {gw{1'b0}};
+  else if (rgpio_eclk_sel && wb_we_i)
   begin
 `ifdef GPIO_STRICT_32BIT_ACCESS
-		rgpio_eclk <= #1 wb_dat_i[gw-1:0];
+    rgpio_eclk <= #1 wb_dat_i[gw-1:0];
 `endif
 
 `ifdef GPIO_WB_BYTES4
@@ -705,7 +705,7 @@ always @(posedge wb_clk_i or posedge wb_rst_i)
 
 
 `else
-assign rgpio_eclk = `GPIO_DEF_RGPIO_ECLK;	// RGPIO_ECLK = 0x0
+assign rgpio_eclk = `GPIO_DEF_RGPIO_ECLK;  // RGPIO_ECLK = 0x0
 `endif
 
 
@@ -715,12 +715,12 @@ assign rgpio_eclk = `GPIO_DEF_RGPIO_ECLK;	// RGPIO_ECLK = 0x0
 //
 `ifdef GPIO_RGPIO_NEC
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		rgpio_nec <= #1 {gw{1'b0}};
-	else if (rgpio_nec_sel && wb_we_i)
+  if (wb_rst_i)
+    rgpio_nec <= #1 {gw{1'b0}};
+  else if (rgpio_nec_sel && wb_we_i)
   begin
 `ifdef GPIO_STRICT_32BIT_ACCESS
-		rgpio_nec <= #1 wb_dat_i[gw-1:0];
+    rgpio_nec <= #1 wb_dat_i[gw-1:0];
 `endif
 
 `ifdef GPIO_WB_BYTES4
@@ -755,7 +755,7 @@ always @(posedge wb_clk_i or posedge wb_rst_i)
 
 
 `else
-assign rgpio_nec = `GPIO_DEF_RGPIO_NEC;	// RGPIO_NEC = 0x0
+assign rgpio_nec = `GPIO_DEF_RGPIO_NEC;  // RGPIO_NEC = 0x0
 `endif
 
 //
@@ -764,25 +764,25 @@ assign rgpio_nec = `GPIO_DEF_RGPIO_NEC;	// RGPIO_NEC = 0x0
 `ifdef  GPIO_SYNC_IN_WB
 always @(posedge wb_clk_i or posedge wb_rst_i)
   if (wb_rst_i) begin
-    sync      <= #1 {gw{1'b0}} ; 
-    ext_pad_s <= #1 {gw{1'b0}} ; 
+    sync      <= #1 {gw{1'b0}} ;
+    ext_pad_s <= #1 {gw{1'b0}} ;
   end else begin
-    sync      <= #1 ext_pad_i  ; 
-    ext_pad_s <= #1 sync       ; 
+    sync      <= #1 ext_pad_i  ;
+    ext_pad_s <= #1 sync       ;
   end
-`else 
+`else
 assign  ext_pad_s = ext_pad_i;
 `endif // GPIO_SYNC_IN_WB
-  
+
 //
 // Latch into RGPIO_IN
 //
 `ifdef GPIO_RGPIO_IN
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		rgpio_in <= #1 {gw{1'b0}};
-	else
-		rgpio_in <= #1 in_muxed;
+  if (wb_rst_i)
+    rgpio_in <= #1 {gw{1'b0}};
+  else
+    rgpio_in <= #1 in_muxed;
 `else
 assign rgpio_in = in_muxed;
 `endif
@@ -805,10 +805,10 @@ wire [gw-1:0] pedge_vec   ,
               nedge_vec   ;
 wire [gw-1:0] in_lach     ;
 
-assign pedge =  clk_s & !clk_r ; 
-assign nedge = !clk_s &  clk_r ; 
-assign pedge_vec = {gw{pedge}} ;   
-assign nedge_vec = {gw{nedge}} ;   
+assign pedge =  clk_s & !clk_r ;
+assign nedge = !clk_s &  clk_r ;
+assign pedge_vec = {gw{pedge}} ;
+assign nedge_vec = {gw{nedge}} ;
 
 assign in_lach = (~rgpio_nec & pedge_vec) | (rgpio_nec & nedge_vec) ;
 assign extc_in = (in_lach & ext_pad_s) | (~in_lach & pextc_sampled) ;
@@ -867,11 +867,11 @@ reg [gw-1:0] syn_pclk    ,
 
 always @(posedge clk_pad_i or posedge wb_rst_i)
   if (wb_rst_i) begin
-    syn_pclk    <= #1 {gw{1'b0}} ; 
-    ext_pad_spc <= #1 {gw{1'b0}} ; 
+    syn_pclk    <= #1 {gw{1'b0}} ;
+    ext_pad_spc <= #1 {gw{1'b0}} ;
   end else begin
-    syn_pclk    <= #1 ext_pad_i ; 
-    ext_pad_spc <= #1 syn_pclk  ; 
+    syn_pclk    <= #1 ext_pad_i ;
+    ext_pad_spc <= #1 syn_pclk  ;
   end
 
 `else
@@ -906,11 +906,11 @@ reg [gw-1:0] syn_nclk    ,
 
 always @(posedge clk_n or posedge wb_rst_i)
   if (wb_rst_i) begin
-    syn_nclk    <= #1 {gw{1'b0}} ; 
-    ext_pad_snc <= #1 {gw{1'b0}} ; 
+    syn_nclk    <= #1 {gw{1'b0}} ;
+    ext_pad_snc <= #1 {gw{1'b0}} ;
   end else begin
-    syn_nclk    <= #1 ext_pad_i ; 
-    ext_pad_snc <= #1 syn_nclk  ; 
+    syn_nclk    <= #1 ext_pad_i ;
+    ext_pad_snc <= #1 syn_nclk  ;
   end
 
 `else
@@ -925,7 +925,7 @@ always @(posedge clk_n or posedge wb_rst_i)
     nextc_sampled <= #1 {gw{1'b0}};
   end else begin
     nextc_sampled <= #1 ext_pad_snc ;
-  end  
+  end
 
 assign extc_in = (~rgpio_nec & pextc_sampled) | (rgpio_nec & nextc_sampled) ;
 
@@ -940,11 +940,11 @@ reg [gw-1:0] syn_nclk    ,
 
 always @(negedge clk_n or posedge wb_rst_i)
   if (wb_rst_i) begin
-    syn_nclk    <= #1 {gw{1'b0}} ; 
-    ext_pad_snc <= #1 {gw{1'b0}} ; 
+    syn_nclk    <= #1 {gw{1'b0}} ;
+    ext_pad_snc <= #1 {gw{1'b0}} ;
   end else begin
-    syn_nclk    <= #1 ext_pad_i ; 
-    ext_pad_snc <= #1 syn_nclk  ; 
+    syn_nclk    <= #1 ext_pad_i ;
+    ext_pad_snc <= #1 syn_nclk  ;
   end
 
 `else
@@ -983,70 +983,70 @@ assign  in_muxed  = ext_pad_s ;
 // Mux all registers when doing a read of GPIO registers
 //
 always @(wb_adr_i or rgpio_in or rgpio_out or rgpio_oe or rgpio_inte or
-		rgpio_ptrig or rgpio_aux or rgpio_ctrl or rgpio_ints or rgpio_eclk or rgpio_nec)
-	case (wb_adr_i[`GPIO_OFS_BITS])	// synopsys full_case parallel_case
+    rgpio_ptrig or rgpio_aux or rgpio_ctrl or rgpio_ints or rgpio_eclk or rgpio_nec)
+  case (wb_adr_i[`GPIO_OFS_BITS])  // synopsys full_case parallel_case
 `ifdef GPIO_READREGS
   `ifdef GPIO_RGPIO_OUT
-  	`GPIO_RGPIO_OUT: begin
-			wb_dat[dw-1:0] = rgpio_out;
-		end
+    `GPIO_RGPIO_OUT: begin
+      wb_dat[dw-1:0] = rgpio_out;
+    end
   `endif
   `ifdef GPIO_RGPIO_OE
-		`GPIO_RGPIO_OE: begin
-			wb_dat[dw-1:0] = rgpio_oe;
-		end
+    `GPIO_RGPIO_OE: begin
+      wb_dat[dw-1:0] = rgpio_oe;
+    end
   `endif
   `ifdef GPIO_RGPIO_INTE
-		`GPIO_RGPIO_INTE: begin
-			wb_dat[dw-1:0] = rgpio_inte;
-		end
+    `GPIO_RGPIO_INTE: begin
+      wb_dat[dw-1:0] = rgpio_inte;
+    end
   `endif
   `ifdef GPIO_RGPIO_PTRIG
-		`GPIO_RGPIO_PTRIG: begin
-			wb_dat[dw-1:0] = rgpio_ptrig;
-		end
+    `GPIO_RGPIO_PTRIG: begin
+      wb_dat[dw-1:0] = rgpio_ptrig;
+    end
   `endif
   `ifdef GPIO_RGPIO_NEC
-		`GPIO_RGPIO_NEC: begin
-			wb_dat[dw-1:0] = rgpio_nec;
-		end
+    `GPIO_RGPIO_NEC: begin
+      wb_dat[dw-1:0] = rgpio_nec;
+    end
   `endif
   `ifdef GPIO_RGPIO_ECLK
-		`GPIO_RGPIO_ECLK: begin
-			wb_dat[dw-1:0] = rgpio_eclk;
-		end
+    `GPIO_RGPIO_ECLK: begin
+      wb_dat[dw-1:0] = rgpio_eclk;
+    end
   `endif
   `ifdef GPIO_RGPIO_AUX
-		`GPIO_RGPIO_AUX: begin
-			wb_dat[dw-1:0] = rgpio_aux;
-		end
+    `GPIO_RGPIO_AUX: begin
+      wb_dat[dw-1:0] = rgpio_aux;
+    end
   `endif
   `ifdef GPIO_RGPIO_CTRL
-		`GPIO_RGPIO_CTRL: begin
-			wb_dat[1:0] = rgpio_ctrl;
-			wb_dat[dw-1:2] = {dw-2{1'b0}};
-		end
+    `GPIO_RGPIO_CTRL: begin
+      wb_dat[1:0] = rgpio_ctrl;
+      wb_dat[dw-1:2] = {dw-2{1'b0}};
+    end
   `endif
 `endif
   `ifdef GPIO_RGPIO_INTS
-		`GPIO_RGPIO_INTS: begin
-			wb_dat[dw-1:0] = rgpio_ints;
-		end
+    `GPIO_RGPIO_INTS: begin
+      wb_dat[dw-1:0] = rgpio_ints;
+    end
   `endif
-		default: begin
-			wb_dat[dw-1:0] = rgpio_in;
-		end
-	endcase
+    default: begin
+      wb_dat[dw-1:0] = rgpio_in;
+    end
+  endcase
 
 //
 // WB data output
 //
 `ifdef GPIO_REGISTERED_WB_OUTPUTS
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		wb_dat_o <= #1 {dw{1'b0}};
-	else
-		wb_dat_o <= #1 wb_dat;
+  if (wb_rst_i)
+    wb_dat_o <= #1 {dw{1'b0}};
+  else
+    wb_dat_o <= #1 wb_dat;
 `else
 assign wb_dat_o = wb_dat;
 `endif
@@ -1056,12 +1056,12 @@ assign wb_dat_o = wb_dat;
 //
 `ifdef GPIO_RGPIO_INTS
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		rgpio_ints <= #1 {gw{1'b0}};
-	else if (rgpio_ints_sel && wb_we_i)
-		rgpio_ints <= #1 wb_dat_i[gw-1:0];
-	else if (rgpio_ctrl[`GPIO_RGPIO_CTRL_INTE])
-		rgpio_ints <= #1 (rgpio_ints | ((in_muxed ^ rgpio_in) & ~(in_muxed ^ rgpio_ptrig)) & rgpio_inte);
+  if (wb_rst_i)
+    rgpio_ints <= #1 {gw{1'b0}};
+  else if (rgpio_ints_sel && wb_we_i)
+    rgpio_ints <= #1 wb_dat_i[gw-1:0];
+  else if (rgpio_ctrl[`GPIO_RGPIO_CTRL_INTE])
+    rgpio_ints <= #1 (rgpio_ints | ((in_muxed ^ rgpio_in) & ~(in_muxed ^ rgpio_ptrig)) & rgpio_inte);
 `else
 assign rgpio_ints = (rgpio_ints | ((in_muxed ^ rgpio_in) & ~(in_muxed ^ rgpio_ptrig)) & rgpio_inte);
 `endif
@@ -1076,10 +1076,10 @@ assign wb_inta = |rgpio_ints ? rgpio_ctrl[`GPIO_RGPIO_CTRL_INTE] : 1'b0;
 //
 `ifdef GPIO_REGISTERED_WB_OUTPUTS
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		wb_inta_o <= #1 1'b0;
-	else
-		wb_inta_o <= #1 wb_inta;
+  if (wb_rst_i)
+    wb_inta_o <= #1 1'b0;
+  else
+    wb_inta_o <= #1 wb_inta;
 `else
 assign wb_inta_o = wb_inta;
 `endif // GPIO_REGISTERED_WB_OUTPUTS
@@ -1103,10 +1103,10 @@ assign out_pad = rgpio_out ;
 //
 `ifdef GPIO_REGISTERED_IO_OUTPUTS
 always @(posedge wb_clk_i or posedge wb_rst_i)
-	if (wb_rst_i)
-		ext_pad_o <= #1 {gw{1'b0}};
-	else
-		ext_pad_o <= #1 out_pad;
+  if (wb_rst_i)
+    ext_pad_o <= #1 {gw{1'b0}};
+  else
+    ext_pad_o <= #1 out_pad;
 `else
 assign ext_pad_o = out_pad;
 `endif // GPIO_REGISTERED_IO_OUTPUTS
