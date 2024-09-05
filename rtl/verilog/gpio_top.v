@@ -135,18 +135,26 @@ parameter gw = `GPIO_IOS;
 //
 // WISHBONE Interface
 //
-input             wb_clk_i;  // Clock
-input             wb_rst_i;  // Reset
-input             wb_cyc_i;  // cycle valid input
-input   [aw-1:0]  wb_adr_i;  // address bus inputs
-input   [dw-1:0]  wb_dat_i;  // input data bus
-input    [3:0]     wb_sel_i;  // byte select inputs
-input             wb_we_i;  // indicates write transfer
-input             wb_stb_i;  // strobe input
-output  [dw-1:0]  wb_dat_o;  // output data bus
-output            wb_ack_o;  // normal termination
-output            wb_err_o;  // termination w/ error
-output            wb_inta_o;  // Interrupt request output
+input wire            wb_clk_i;  // Clock
+input wire            wb_rst_i;  // Reset
+input wire            wb_cyc_i;  // cycle valid input
+input wire  [aw-1:0]  wb_adr_i;  // address bus inputs
+input wire  [dw-1:0]  wb_dat_i;  // input data bus
+input wire   [3:0]    wb_sel_i;  // byte select inputs
+input wire            wb_we_i;  // indicates write transfer
+input wire            wb_stb_i;  // strobe input
+
+`ifdef GPIO_REGISTERED_WB_OUTPUTS
+output reg             wb_ack_o; // WB Acknowledge
+output reg             wb_err_o; // WB Error
+output reg             wb_inta_o;  // WB Interrupt
+output reg   [dw-1:0]  wb_dat_o; // WB Data out
+`else
+output wire             wb_ack_o; // WB Acknowledge
+output wire             wb_err_o; // WB Error
+output wire             wb_inta_o;  // WB Interrupt
+output wire   [dw-1:0]  wb_dat_o; // WB Data out
+`endif
 
 `ifdef GPIO_AUX_IMPLEMENT
 // Auxiliary Inputs Interface
@@ -156,12 +164,16 @@ input    [gw-1:0]  aux_i;    // Auxiliary inputs
 //
 // External GPIO Interface
 //
-input   [gw-1:0]  ext_pad_i;  // GPIO Inputs
+input  wire [gw-1:0]  ext_pad_i;  // GPIO Inputs
 `ifdef GPIO_CLKPAD
-input             clk_pad_i;  // GPIO Eclk
+input wire            clk_pad_i;  // GPIO Eclk
 `endif //  GPIO_CLKPAD
-output  [gw-1:0]  ext_pad_o;  // GPIO Outputs
-output  [gw-1:0]  ext_padoe_o;  // GPIO output drivers enables
+`ifdef GPIO_REGISTERED_IO_OUTPUTS
+output reg   [gw-1:0]  ext_pad_o;  // GPIO Outputs
+`else
+output wire [gw-1:0]  ext_pad_o;  // GPIO Outputs
+`endif
+output wire [gw-1:0]  ext_padoe_o;  // GPIO output drivers enables
 
 `ifdef GPIO_IMPLEMENTED
 
@@ -286,16 +298,7 @@ wire            wb_ack;   // WB Acknowledge
 wire            wb_err;   // WB Error
 wire            wb_inta;  // WB Interrupt
 reg   [dw-1:0]  wb_dat;   // WB Data out
-`ifdef GPIO_REGISTERED_WB_OUTPUTS
-reg             wb_ack_o; // WB Acknowledge
-reg             wb_err_o; // WB Error
-reg             wb_inta_o;  // WB Interrupt
-reg   [dw-1:0]  wb_dat_o; // WB Data out
-`endif
 wire  [gw-1:0]  out_pad;  // GPIO Outputs
-`ifdef GPIO_REGISTERED_IO_OUTPUTS
-reg   [gw-1:0]  ext_pad_o;  // GPIO Outputs
-`endif
 `ifdef GPIO_CLKPAD
 wire  [gw-1:0]  extc_in;  // Muxed inputs sampled by external clock
 wire  [gw-1:0]  pext_clk; // External clock for posedge flops
